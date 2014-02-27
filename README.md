@@ -136,12 +136,12 @@ Timestamp that uses the fractional part to define milliseconds. I don't know, I 
 
 ## Donations
 
-BTC: 13jg5WJRJDxiHgwPZY5x6ay8a3gtYxzdk4
+**BTC:** `13jg5WJRJDxiHgwPZY5x6ay8a3gtYxzdk4`
 
-LTC: LajigoAbGgKT2jyHvYCJuaBqaw4jeC9C9K
+**LTC:** `LajigoAbGgKT2jyHvYCJuaBqaw4jeC9C9K`
 
-XPM: AWJvwE4Q9as8qr5dLU2WNCw2RDe77EV45x
+**XPM:** `AWJvwE4Q9as8qr5dLU2WNCw2RDe77EV45x`
 
-DOGE: DDUfXoeCrWkg1sXV71WaUA6zT1rg5h4Wbm
+**DOGE:** `DDUfXoeCrWkg1sXV71WaUA6zT1rg5h4Wbm`
 
-MINT: MgKnhkCW6qCS73feqxdHRzQpMn3upMApFy
+**MINT:** `MgKnhkCW6qCS73feqxdHRzQpMn3upMApFy`
