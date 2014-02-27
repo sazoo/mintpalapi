@@ -2,7 +2,7 @@
 
 Java-based API to access Mintpal.com data using Google's gson library.
 
-Author is affiliated with neither Mintpal nor Google.
+Author is affiliated with neither [Mintpal](https://www.mintpal.com/) nor [Google](https://www.google.com/).
 
 [https://support.mintpal.com/index.php?module=announce&sec=view&id=4](https://support.mintpal.com/index.php?module=announce&sec=view&id=4)
 
