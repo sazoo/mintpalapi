@@ -1,5 +1,4 @@
-Mintpal API
-==========
+# Mintpal API
 
 Java-based API to access Mintpal.com data using Google's gson library.
 
@@ -11,48 +10,40 @@ Author is affiliated with neither Mintpal nor Google.
 
 
 
-Goal
-==========
+## Goal
 
 This Java-based Mintpal API is designed to get any data available from the official Mintpal API.
 
 
 
-Functions
-==========
+## Functions
 
 
-`void Mintpal.init()`
-----------
+### `void Mintpal.init()`
 
 Call once to initialize the gson library used to parse json data.
 
 
-`MarketTradesData getMarketTrades( String marketPair )`
-----------
+### `MarketTradesData getMarketTrades( String marketPair )`
 
 Returns an object containing a list of the past trades for the given market pairing. The structure of the object is given in the Objects section.
 
 
-**##TODO##** `ExchangeOverviewData getExchangeOverview()`
-----------
+### **##TODO##** `ExchangeOverviewData getExchangeOverview()`
 
 Returns an object containing a list of data for each market pairing in the Mintpal exchange. If a market does not appear in the listing, please contact Mintpal staff to fix it and not the author. The structure of the object is given in the Objects section.
 
 
-**##TODO##** `MarketData getMarketData( String marketPair )`
-----------
+### **##TODO##** `MarketData getMarketData( String marketPair )`
 
 Returns an object containing a list of data for a particular market pairing. The structure of the object is given in the Objects section.
 
 
 
-Objects
-==========
+## Objects
 
 
-`MarketTradesData`
-----------
+### `MarketTradesData`
 
 Contains data about the market's most recent trades. Getters exist for each `variable` using `getVariable()`.
 
@@ -69,8 +60,7 @@ Array of Trade objects each containing data about specific trade. `trades[0]` is
 Market pair submitted by user and used for the query.
 
 
-`TradeData`
-----------
+### `TradeData`
 
 Contains data about a single trade on a market. Getters exist for each `variable` using `getVariable()`.
 
@@ -95,8 +85,7 @@ Number of coins traded.
 Timestamp that uses the fractional part to define milliseconds. I don't know, I just multiply it by 1000 when I need to convert it to a date.
 
 
-**##TODO##** `ExchangeOverviewData`
-----------
+### **##TODO##** `ExchangeOverviewData`
 
 Getters exist for each `variable` using `getVariable()`.
 
@@ -105,8 +94,7 @@ Getters exist for each `variable` using `getVariable()`.
 Contains a list of MarketData objects corresponding to each market.
 
 
-**##TODO##** `MarketData`
-----------
+### **##TODO##** `MarketData`
 
 Getters exist for each `variable` using `getVariable()`.
 
