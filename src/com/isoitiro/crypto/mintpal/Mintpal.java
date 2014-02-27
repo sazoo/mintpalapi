@@ -27,7 +27,8 @@ public class Mintpal {
     if( gson == null ) {
       GsonBuilder builder = new GsonBuilder();
       
-      builder.registerTypeAdapter( TradeData.class, new TradeDeserializer() );
+      builder.registerTypeAdapter( TradeData.class, new TradeDataDeserializer() );
+      builder.registerTypeAdapter( MarketData.class, new MarketDataDeserializer() );
       
       gson = builder.create();
     }
@@ -66,69 +67,107 @@ public class Mintpal {
   }
   
   public static MarketTradesData getMarketTrades( String marketPair ) {
-    String url = "http://api.mintpal.com/market/trades/" + marketPair.toUpperCase();
+    String url = "https://api.mintpal.com/market/trades/" + marketPair.toUpperCase();
     String data = makeRequest( url );
     if( data.equals( "" ) )
       return null;
     MarketTradesData marketTrades = gson.fromJson( data, MarketTradesData.class );
-    marketTrades.setMarketPair( marketPair );
+    marketTrades.marketPair = marketPair;
     return marketTrades;
   }
   
-  private static class TradeDeserializer implements JsonDeserializer< TradeData > {
+  public static MarketData getMarketData( String marketPair ) {
+    String url = "https://api.mintpal.com/market/stats/" + marketPair.toUpperCase();
+    String data = makeRequest( url );
+    if( data.equals( "" ) )
+      return null;
+    MarketData market = gson.fromJson( data, MarketData.class );
+    return market;
+  }
+  
+  public static ExchangeOverviewData getExchangeOverview() {
+    String url = "https://api.mintpal.com/market/summary/";
+    String data = makeRequest( url );
+    if( data.equals( "" ) )
+      return null;
+    ExchangeOverviewData exchange = gson.fromJson( data, ExchangeOverviewData.class );
+    return exchange;
+  }
+  
+  private static class MarketDataDeserializer implements JsonDeserializer< MarketData > {
+    @Override
+    public MarketData deserialize( final JsonElement json, Type typeOfT, final JsonDeserializationContext context )
+        throws JsonParseException {
+      final JsonObject jsonObject = json.getAsJsonObject();
+      final MarketData market = new MarketData();
+      
+      market.marketId = jsonObject.get( "market_id" ).getAsInt();
+      market.code = jsonObject.get( "code" ).getAsString();
+      market.exchange = jsonObject.get( "exchange" ).getAsString();
+      market.lastPrice = jsonObject.get( "last_price" ).getAsDouble();
+      market.yesterdayPrice = jsonObject.get( "yesterday_price" ).getAsDouble();
+      market.change = jsonObject.get( "change" ).getAsDouble();
+      market.dailyHigh = jsonObject.get( "24hhigh" ).getAsDouble();
+      market.dailyLow = jsonObject.get( "24hlow" ).getAsDouble();
+      market.dailyVolume = jsonObject.get( "24hvol" ).getAsDouble();
+      
+      return market;
+    }
+  }
+  
+  private static class TradeDataDeserializer implements JsonDeserializer< TradeData > {
     @Override
     public TradeData deserialize( final JsonElement json, Type typeOfT, final JsonDeserializationContext context )
         throws JsonParseException {
       final JsonObject jsonObject = json.getAsJsonObject();
-      
-      final int type = jsonObject.get( "type" ).getAsInt();
-      final double price = jsonObject.get( "price" ).getAsDouble();
-      final double btcValue = jsonObject.get( "total" ).getAsDouble();
-      final double amount = jsonObject.get( "amount" ).getAsDouble();
-      final double time = jsonObject.get( "time" ).getAsDouble();
-      
-      // Build object
       final TradeData trade = new TradeData();
-      trade.setType( type );
-      trade.setPrice( price );
-      trade.setBtcValue( btcValue );
-      trade.setAmount( amount );
-      trade.setTime( time );
+      
+      trade.type = jsonObject.get( "type" ).getAsInt();
+      trade.price = jsonObject.get( "price" ).getAsDouble();
+      trade.amount = jsonObject.get( "amount" ).getAsDouble();
+      trade.btcValue = jsonObject.get( "total" ).getAsDouble();
+      trade.time = jsonObject.get( "time" ).getAsDouble();
+      
       return trade;
     }
   }
   
+  public static class ExchangeOverviewData {
+    public MarketData[] marketDataArray = null;
+    
+    @Override
+    public String toString() {
+      String output = "" + marketDataArray[0];
+      for( int i = 1; i < marketDataArray.length; ++i )
+        output += "\n" + marketDataArray[i];
+      return output;
+    }
+  }
+  
+  public static class MarketData {
+    public int    marketId       = -1;
+    public String code           = null;
+    public String exchange       = null;
+    public double lastPrice      = -1.0;
+    public double yesterdayPrice = -1.0;
+    public double change         = -1.0;
+    public double dailyHigh      = -1.0;
+    public double dailyLow       = -1.0;
+    public double dailyVolume    = -1.0;
+    
+    @Override
+    public String toString() {
+      DecimalFormat format = new DecimalFormat( "###0.00000000" );
+      return String.format( "%d,%s,%s,%f,%f,%f,%f,%f,%f", marketId, code, exchange, format.format( lastPrice ),
+          format.format( yesterdayPrice ), format.format( change ), format.format( dailyHigh ),
+          format.format( dailyLow ), format.format( dailyVolume ) );
+    }
+  }
+  
   public static class MarketTradesData {
-    private int     count      = -1;
-    private TradeData[] trades     = null;
-    private String  marketPair = null;
-    
-    public int getCount() {
-      return count;
-    }
-    
-    public void setCount( int count ) {
-      if( this.count == -1 )
-        this.count = count;
-    }
-    
-    public TradeData[] getTrades() {
-      return trades;
-    }
-    
-    public void setTrades( TradeData[] trades ) {
-      if( this.trades == null )
-        this.trades = trades;
-    }
-    
-    public String getMarketPair() {
-      return marketPair;
-    }
-    
-    public void setMarketPair( String marketPair ) {
-      if( this.marketPair == null )
-        this.marketPair = marketPair;
-    }
+    public int         count      = -1;
+    public TradeData[] trades     = null;
+    public String      marketPair = null;
     
     @Override
     public String toString() {
@@ -143,62 +182,17 @@ public class Mintpal {
     public final int TYPE_BUY  = 0;
     public final int TYPE_SELL = 1;
     
-    private int      type      = -1;  // TYPE_BUY or TYPE_SELL
-    private double   price     = -1.0;
-    private double   btcValue  = -1.0; // BTC value of coins traded
-    private double   amount    = -1.0; // Number of coins traded
-    private double   time      = -1.0; // Some weird thing with milliseconds as the fractional part.
+    public int       type      = -1;  // TYPE_BUY or TYPE_SELL
+    public double    price     = -1.0;
+    public double    amount    = -1.0; // Number of coins traded
+    public double    btcValue  = -1.0; // BTC value of coins traded
+    public double    time      = -1.0; // Some weird thing with milliseconds as the fractional part.
                                        
-    public int getType() {
-      return type;
-    }
-    
-    public void setType( int type ) {
-      if( this.type == -1 )
-        this.type = type;
-    }
-    
-    public double getPrice() {
-      return price;
-    }
-    
-    public void setPrice( double price ) {
-      if( this.price == -1.0 )
-        this.price = price;
-    }
-    
-    public double getBtcValue() {
-      return btcValue;
-    }
-    
-    public void setBtcValue( double btcValue ) {
-      if( this.btcValue == -1.0 )
-        this.btcValue = btcValue;
-    }
-    
-    public double getAmount() {
-      return amount;
-    }
-    
-    public void setAmount( double amount ) {
-      if( this.amount == -1.0 )
-        this.amount = amount;
-    }
-    
-    public double getTime() {
-      return time;
-    }
-    
-    public void setTime( double time ) {
-      if( this.time == -1.0 )
-        this.time = time;
-    }
-    
     @Override
     public String toString() {
       DecimalFormat format = new DecimalFormat( "###0.00000000" );
       return String.format( "%s,%s,%s,%s,%s", (type == TYPE_BUY) ? "buy" : "sell", format.format( price ),
-          format.format( btcValue ), format.format( amount ), new Date( (long) (time * 1000) ).toString() );
+          format.format( amount ), format.format( btcValue ), new Date( (long) (time * 1000) ).toString() );
     }
     
   }
