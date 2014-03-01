@@ -138,10 +138,50 @@ Timestamp that uses the fractional part to define milliseconds. I don't know, I 
 
 **BTC:** `13jg5WJRJDxiHgwPZY5x6ay8a3gtYxzdk4`
 
+**DOGE:** `DKssTUtDadgeoFfoFKroy5bHPRyWbcYySy`
+
 **LTC:** `LajigoAbGgKT2jyHvYCJuaBqaw4jeC9C9K`
 
-**XPM:** `AWJvwE4Q9as8qr5dLU2WNCw2RDe77EV45x`
-
-**DOGE:** `DDUfXoeCrWkg1sXV71WaUA6zT1rg5h4Wbm`
-
 **MINT:** `MgKnhkCW6qCS73feqxdHRzQpMn3upMApFy`
+
+
+
+**AUR:** `AXKHD8Xy2JXzc2xVt9b1RG8o9XaKQMxdLn`
+
+**BC:** `BR2uuJ5hzoM6A4oz7TLQvk55uyvQHh8KJf`
+
+**CAGE:** `DqVhNwCYrNHuscXiUkgjyzFf2GuF6oV1CJ`
+
+**DGB:** `DSqY1jJTbyh4T9B9bKCucUNRqPaYJYTvVD`
+
+**DOPE:** `4NioHZvQFT6E1u4SQTVumASVYFASYJs43U`
+
+**DRK:** `XrLZbRfqJJ97C4yEtKVTSaiCcmfJMmEPob`
+
+**KARM:** `KSxxbdbYFbgNrCRFD7AMufZJo5KgwV1qkA`
+
+**MRC:** `1JWBVsUnkhaS2zpxsJupGGMXxBoD93HM3i`
+
+**MRS:** `MLBjZimin5KgKrUfuvc5rsYZiK4sADobEV`
+
+**OLY:** `5imoxgFvLrhEo3yxJx4skor8XvoEPXstWi`
+
+**PANDA:** `PmwE4ek8SBtnQFWeWXADvxninFeDVvBTKH`
+
+**PENG:** `p7GsipLPATSA9tBe3ret6rofnuxxQjRbtT`
+
+**PND:** `PPeqko8mK46yZjL8HyDmpagSxb4wqv8rxw`
+
+**RIC:** `RQzb7fMuMm8o2CbqdMP55UkHkzo2Vkp6H1`
+
+**SUN:** `SXaRJw7HCstLAsLsQkDVVxkPaWS9ni1fia`
+
+**TAK:** `TR1HUparXs8hiBD5n6r5QEUs8V4sNReHPC`
+
+**TES:** `5VbKxFEmP72QPfm9zSy2Z7VjJkFiqGwoQG`
+
+**TOP:** `TawwSNYP5ZiVDFFQnFe4ngrSYs61g6ZCdD`
+
+**UNO:** `udiyR7dkBtYaFA6NTvXxDih5DG5yiYNb1W`
+
+**UTC:** `UVbWWFtW7QySGND2MVeBYUL7F9f32euFnB`

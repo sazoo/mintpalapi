@@ -34,14 +34,12 @@ public class Mintpal {
     }
   }
   
-  private static void checkGson() {
-    if( gson == null ) {
-      System.out.println( "ERROR: Please initialize Mintpal API before attempting to retrieve data." );
-      System.exit( 1 );
-    }
+  private static void checkGson() throws APIException {
+    if( gson == null )
+      throw new APIException( -1, "initialize Mintpal API before attempting to retrieve data." );
   }
   
-  private static String makeRequest( String url ) {
+  private static String makeRequest( String url ) throws APIException {
     checkGson();
     
     String data = "";
@@ -62,34 +60,48 @@ public class Mintpal {
       
       return data;
     } catch( IOException e ) {
-      return "";
+      throw new APIException( -1, "Error reading data from stream." );
     }
   }
   
-  public static MarketTradesData getMarketTrades( String marketPair ) {
+  private static void checkRequestError( String data ) throws APIException {
+    JsonObject root = gson.fromJson( data, JsonElement.class ).getAsJsonObject();
+    
+    if( root.has( "error" ) ) {
+      JsonObject error = root.get( "error" ).getAsJsonObject();
+      int code = error.get( "code" ).getAsInt();
+      String message = error.get( "message" ).getAsString();
+      throw new APIException( code, message );
+    }
+  }
+  
+  public static MarketTradesData getMarketTrades( String marketPair ) throws APIException {
     String url = "https://api.mintpal.com/market/trades/" + marketPair.toUpperCase();
     String data = makeRequest( url );
-    if( data.equals( "" ) )
-      return null;
+    
+    checkRequestError( data );
+    
     MarketTradesData marketTrades = gson.fromJson( data, MarketTradesData.class );
     marketTrades.marketPair = marketPair;
     return marketTrades;
   }
   
-  public static MarketData getMarketData( String marketPair ) {
+  public static MarketData getMarketData( String marketPair ) throws APIException {
     String url = "https://api.mintpal.com/market/stats/" + marketPair.toUpperCase();
     String data = makeRequest( url );
-    if( data.equals( "" ) )
-      return null;
+    
+    checkRequestError( data );
+    
     MarketData market = gson.fromJson( data, MarketData.class );
     return market;
   }
   
-  public static ExchangeOverviewData getExchangeOverview() {
+  public static ExchangeOverviewData getExchangeOverview() throws APIException {
     String url = "https://api.mintpal.com/market/summary/";
     String data = makeRequest( url );
-    if( data.equals( "" ) )
-      return null;
+    
+    checkRequestError( data );
+    
     ExchangeOverviewData exchange = gson.fromJson( data, ExchangeOverviewData.class );
     return exchange;
   }
@@ -196,9 +208,25 @@ public class Mintpal {
     }
     
   }
+  
+  @SuppressWarnings( "serial" )
+  public static class APIException extends Exception {
+    int errorCode = -1;
+    
+    public APIException( int errorCode, String error ) {
+      super( error );
+    }
+    
+    @Override
+    public String getMessage() {
+      if( errorCode != -1 )
+        return "Code " + errorCode + ": " + super.getMessage();
+      else
+        return super.getMessage();
+    }
+  }
 }
 
-// TODO: https://api.mintpal.com/market/summary/
-// TODO: https://api.mintpal.com/market/stats/MINT/BTC
-
+// https://api.mintpal.com/market/summary/
+// https://api.mintpal.com/market/stats/MINT/BTC
 // https://api.mintpal.com/market/trades/MINT/BTC
