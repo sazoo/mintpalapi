@@ -16,6 +16,21 @@ This Java-based Mintpal API is designed to get any data available from the offic
 
 
 
+## Included
+
+Included in this repository is the Mintpal API query code and a few basic API-based utilities.
+
+
+### MarketWatcher
+
+Given an output path and market pairing, this will record trade history as long as it is running.
+
+Ex. `java -jar MarketWatcher.jar .\output.csv MINT/BTC`
+
+Output is in Comma Seperated Values, but you can use any extension and it should be easily imported into Excel or most other spreadsheet programs.
+
+
+
 ## Functions
 
 
