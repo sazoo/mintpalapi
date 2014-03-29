@@ -4,7 +4,7 @@ Java-based API to access Mintpal.com data using Google's gson library.
 
 Author is affiliated with neither [Mintpal](https://www.mintpal.com/) nor [Google](https://www.google.com/).
 
-[https://support.mintpal.com/index.php?module=announce&sec=view&id=4](https://support.mintpal.com/index.php?module=announce&sec=view&id=4)
+[https://www.mintpal.com/api](https://www.mintpal.com/api)
 
 [https://code.google.com/p/google-gson/](https://code.google.com/p/google-gson/)
 
@@ -18,7 +18,7 @@ This Java-based Mintpal API is designed to get any data available from the offic
 
 ## Included
 
-Included in this repository is the Mintpal API query code and a few basic API-based utilities.
+Included in this repository is the Mintpal API query code and a few basic API based utilities.
 
 
 ### MarketWatcher
@@ -27,7 +27,7 @@ Given an output path and market pairing, this will record trade history as long 
 
 Ex. `java -jar MarketWatcher.jar .\output.csv MINT/BTC`
 
-Output is in Comma Seperated Values, but you can use any extension and it should be easily imported into Excel or most other spreadsheet programs.
+Output is stored in a in a list of Comma Seperated Values, but feel free to use any extension and it should be easily imported into Excel or most other spreadsheet programs.
 
 
 
@@ -39,33 +39,41 @@ Output is in Comma Seperated Values, but you can use any extension and it should
 Call once to initialize the gson library used to parse json data.
 
 
-### `ExchangeOverviewData getExchangeOverview()`
+### `ExchangeSummaryData getExchangeSummary()`
 
-Returns an object containing a list of data for each market pairing in the Mintpal exchange. If a market does not appear in the listing, please contact Mintpal staff to fix it and not the author. The structure of the object is given in the Objects section.
+### `ExchangeSummaryData getExchangeSummary( String exchange )`
+
+Returns a summary of the entire Mintpal exchange in a list of `MarketSummaryData`. Optionally `exchange` can be specified for filtering based on an exchange coin such as BTC or LTC.
 
 
-### `MarketData getMarketData( String marketPair )`
+### `MarketSummaryData getMarketSummary( String marketPair )`
 
-Returns an object containing a list of data for a particular market pairing. The structure of the object is given in the Objects section.
+`marketPair` is a String in the format of `Coin/Exchange` such as `MINT/BTC`.
+
+Returns a `MarketSummaryData` of an individual market.
 
 
 ### `MarketTradesData getMarketTrades( String marketPair )`
 
-Returns an object containing a list of the past trades for the given market pairing. The structure of the object is given in the Objects section.
+`marketPair` is a String in the format of `Coin/Exchange` such as `MINT/BTC`.
+
+Returns a list of `TradeData` for an individual market.
 
 
 
 ## Objects
 
 
-### `ExchangeOverviewData`
+### `ExchangeSummaryData`
 
-`MarketData[] marketDataArray`
+Stores data for every market in the exchange.
 
-Contains a list of MarketData objects corresponding to each market.
+`MarketSummaryData[] marketDataArray`
+
+Contains a list of `MarketSummaryData` objects corresponding to each market.
 
 
-### `MarketData`
+### `MarketSummaryData`
 
 Contains data about a single market's most recent and daily properties.
 
@@ -87,7 +95,7 @@ Close price at midnight of the previous day.
 
 `String exchange`
 
-Base coin you are exchanging to or from. In the case of TOP/BTC or MINT/LTC, `exchange` would be BTC or LTC.
+Base coin you are exchanging to or from. In the case of MINT/BTC or MINT/LTC, `exchange` would be BTC or LTC.
 
 `double change`
 
@@ -116,11 +124,7 @@ Number of transactions returned by the query.
 
 `TradeData[] trades`
 
-Array of Trade objects each containing data about specific trade. `trades[0]` is most recent.
-
-`String marketPair`
-
-Market pair submitted by user and used for the query.
+Array of `TradeData` objects corresponding to previously executed trades. `trades[0]` is most recent.
 
 
 ### `TradeData`
@@ -135,70 +139,22 @@ Contains data about a single trade on a market.
 
 Price at which the coins were traded.
 
-`double btcValue`
-
-BTC value of coins traded.
-
 `amount`
 
 Number of coins traded.
 
+`double total`
+
+Total value of coins traded, calculated in the exchange coin.
+
 `time`
 
-Timestamp that uses the fractional part to define milliseconds. I don't know, I just multiply it by 1000 when I need to convert it to a date.
+Time at which the trade occured in microseconds.
 
 
 
 ## Donations
 
-**BTC:** `13jg5WJRJDxiHgwPZY5x6ay8a3gtYxzdk4`
-
-**DOGE:** `DKssTUtDadgeoFfoFKroy5bHPRyWbcYySy`
-
-**LTC:** `LajigoAbGgKT2jyHvYCJuaBqaw4jeC9C9K`
-
-**MINT:** `MgKnhkCW6qCS73feqxdHRzQpMn3upMApFy`
-
-
-
-**AUR:** `AXKHD8Xy2JXzc2xVt9b1RG8o9XaKQMxdLn`
+[http://addie.cc/isoitiro](http://addie.cc/isoitiro)
 
 **BC:** `BR2uuJ5hzoM6A4oz7TLQvk55uyvQHh8KJf`
-
-**CAGE:** `DqVhNwCYrNHuscXiUkgjyzFf2GuF6oV1CJ`
-
-**DGB:** `DSqY1jJTbyh4T9B9bKCucUNRqPaYJYTvVD`
-
-**DOPE:** `4NioHZvQFT6E1u4SQTVumASVYFASYJs43U`
-
-**DRK:** `XrLZbRfqJJ97C4yEtKVTSaiCcmfJMmEPob`
-
-**KARM:** `KSxxbdbYFbgNrCRFD7AMufZJo5KgwV1qkA`
-
-**MRC:** `1JWBVsUnkhaS2zpxsJupGGMXxBoD93HM3i`
-
-**MRS:** `MLBjZimin5KgKrUfuvc5rsYZiK4sADobEV`
-
-**OLY:** `5imoxgFvLrhEo3yxJx4skor8XvoEPXstWi`
-
-**PANDA:** `PmwE4ek8SBtnQFWeWXADvxninFeDVvBTKH`
-
-**PENG:** `p7GsipLPATSA9tBe3ret6rofnuxxQjRbtT`
-
-**PND:** `PPeqko8mK46yZjL8HyDmpagSxb4wqv8rxw`
-
-**RBBT:** `RMnCghdafjjnSVUKBnB9UcmNn4ixSyfMLj`
-
-**RIC:** `RQzb7fMuMm8o2CbqdMP55UkHkzo2Vkp6H1`
-
-**SUN:** `SXaRJw7HCstLAsLsQkDVVxkPaWS9ni1fia`
-
-**TAK:** `TR1HUparXs8hiBD5n6r5QEUs8V4sNReHPC`
-
-**TES:** `5VbKxFEmP72QPfm9zSy2Z7VjJkFiqGwoQG`
-
-**TOP:** `TawwSNYP5ZiVDFFQnFe4ngrSYs61g6ZCdD`
-
-**UNO:** `udiyR7dkBtYaFA6NTvXxDih5DG5yiYNb1W`
-
-**UTC:** `UVbWWFtW7QySGND2MVeBYUL7F9f32euFnB`

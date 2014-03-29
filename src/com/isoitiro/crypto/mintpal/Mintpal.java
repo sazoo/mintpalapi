@@ -28,7 +28,7 @@ public class Mintpal {
       GsonBuilder builder = new GsonBuilder();
       
       builder.registerTypeAdapter( TradeData.class, new TradeDataDeserializer() );
-      builder.registerTypeAdapter( MarketData.class, new MarketDataDeserializer() );
+      builder.registerTypeAdapter( MarketSummaryData.class, new MarketSummaryDataDeserializer() );
       
       gson = builder.create();
     }
@@ -82,36 +82,45 @@ public class Mintpal {
     checkRequestError( data );
     
     MarketTradesData marketTrades = gson.fromJson( data, MarketTradesData.class );
-    marketTrades.marketPair = marketPair;
     return marketTrades;
   }
   
-  public static MarketData getMarketData( String marketPair ) throws APIException {
+  public static MarketSummaryData getMarketSummary( String marketPair ) throws APIException {
     String url = "https://api.mintpal.com/market/stats/" + marketPair.toUpperCase();
     String data = makeRequest( url );
     
     checkRequestError( data );
     
-    MarketData market = gson.fromJson( data, MarketData.class );
+    MarketSummaryData market = gson.fromJson( data, MarketSummaryData.class );
     return market;
   }
   
-  public static ExchangeOverviewData getExchangeOverview() throws APIException {
+  public static ExchangeSummaryData getExchangeSummary() throws APIException {
     String url = "https://api.mintpal.com/market/summary/";
     String data = makeRequest( url );
     
     checkRequestError( data );
     
-    ExchangeOverviewData exchange = gson.fromJson( data, ExchangeOverviewData.class );
-    return exchange;
+    ExchangeSummaryData exchangeData = gson.fromJson( data, ExchangeSummaryData.class );
+    return exchangeData;
   }
   
-  private static class MarketDataDeserializer implements JsonDeserializer< MarketData > {
+  public static ExchangeSummaryData getExchangeSummary( String exchange ) throws APIException {
+    String url = "https://api.mintpal.com/market/summary/" + exchange.toUpperCase();
+    String data = makeRequest( url );
+    
+    checkRequestError( data );
+    
+    ExchangeSummaryData exchangeData = gson.fromJson( data, ExchangeSummaryData.class );
+    return exchangeData;
+  }
+  
+  private static class MarketSummaryDataDeserializer implements JsonDeserializer< MarketSummaryData > {
     @Override
-    public MarketData deserialize( final JsonElement json, Type typeOfT, final JsonDeserializationContext context )
+    public MarketSummaryData deserialize( final JsonElement json, Type typeOfT, final JsonDeserializationContext context )
         throws JsonParseException {
       final JsonObject jsonObject = json.getAsJsonObject();
-      final MarketData market = new MarketData();
+      final MarketSummaryData market = new MarketSummaryData();
       
       market.marketId = jsonObject.get( "market_id" ).getAsInt();
       market.code = jsonObject.get( "code" ).getAsString();
@@ -137,15 +146,15 @@ public class Mintpal {
       trade.type = jsonObject.get( "type" ).getAsInt();
       trade.price = jsonObject.get( "price" ).getAsDouble();
       trade.amount = jsonObject.get( "amount" ).getAsDouble();
-      trade.btcValue = jsonObject.get( "total" ).getAsDouble();
+      trade.total = jsonObject.get( "total" ).getAsDouble();
       trade.time = jsonObject.get( "time" ).getAsDouble();
       
       return trade;
     }
   }
   
-  public static class ExchangeOverviewData {
-    public MarketData[] marketDataArray = null;
+  public static class ExchangeSummaryData {
+    public MarketSummaryData[] marketDataArray = null;
     
     @Override
     public String toString() {
@@ -156,7 +165,7 @@ public class Mintpal {
     }
   }
   
-  public static class MarketData {
+  public static class MarketSummaryData {
     public int    marketId       = -1;
     public String code           = null;
     public String exchange       = null;
@@ -177,9 +186,8 @@ public class Mintpal {
   }
   
   public static class MarketTradesData {
-    public int         count      = -1;
-    public TradeData[] trades     = null;
-    public String      marketPair = null;
+    public int         count  = -1;
+    public TradeData[] trades = null;
     
     @Override
     public String toString() {
@@ -197,14 +205,14 @@ public class Mintpal {
     public int       type      = -1;  // TYPE_BUY or TYPE_SELL
     public double    price     = -1.0;
     public double    amount    = -1.0; // Number of coins traded
-    public double    btcValue  = -1.0; // BTC value of coins traded
+    public double    total     = -1.0; // BTC value of coins traded
     public double    time      = -1.0; // Some weird thing with milliseconds as the fractional part.
                                        
     @Override
     public String toString() {
       DecimalFormat format = new DecimalFormat( "###0.00000000" );
       return String.format( "%s,%s,%s,%s,%s", (type == TYPE_BUY) ? "buy" : "sell", format.format( price ),
-          format.format( amount ), format.format( btcValue ), new Date( (long) (time * 1000) ).toString() );
+          format.format( amount ), format.format( total ), new Date( (long) (time * 1000) ).toString() );
     }
     
   }

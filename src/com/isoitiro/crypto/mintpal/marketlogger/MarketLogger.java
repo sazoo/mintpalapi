@@ -1,5 +1,5 @@
 
-package com.isoitiro.crypto.mintpal.marketwatch;
+package com.isoitiro.crypto.mintpal.marketlogger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,6 +23,9 @@ public class MarketLogger implements Runnable {
     if( args.length < 2 ) {
       System.out.println( "Run this program with an output file and market pair as arguments. i.e.\n"
           + "java MarketLogger \"C:\\output.csv\" \"MINT/BTC\"" );
+      System.out.println( "It will not overwrite a file if it already exists and will, instead, "
+          + "create a new file with an appended number." );
+      
       System.exit( 1 );
     }
     
@@ -37,13 +40,16 @@ public class MarketLogger implements Runnable {
     
     // Create output file.
     File csvOutput = new File( outputFile );
-    writer = null;
-    if( !csvOutput.exists() ) {
-      try {
-        csvOutput.createNewFile();
-      } catch( IOException e ) {
-        e.printStackTrace();
-      }
+    int append = 1;
+    while( csvOutput.exists() ) { // Try to find a filename that isn't in use.
+      csvOutput = new File( outputFile + "." + append );
+      ++append;
+    }
+    
+    try {
+      csvOutput.createNewFile();
+    } catch( IOException e ) {
+      e.printStackTrace();
     }
     
     try {
@@ -80,7 +86,7 @@ public class MarketLogger implements Runnable {
         e.printStackTrace();
       }
     } catch( APIException e1 ) {
-      e1.printStackTrace();
+      System.out.println( "Mintpal did not respond." );
     }
   }
 }
