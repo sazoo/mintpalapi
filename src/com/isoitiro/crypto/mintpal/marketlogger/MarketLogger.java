@@ -29,10 +29,9 @@ public class MarketLogger implements Runnable {
       System.exit( 1 );
     }
     
-    Mintpal.init();
-    
     ScheduledExecutorService ex = Executors.newSingleThreadScheduledExecutor();
-    ex.scheduleAtFixedRate( new MarketLogger( args[0], args[1] ), 0, 2, TimeUnit.SECONDS );
+    ex.scheduleAtFixedRate( new MarketLogger( args[0], args[1] ), 0, Mintpal.REQUEST_FREQUENCY_MS,
+        TimeUnit.MILLISECONDS );
   }
   
   public MarketLogger( String outputFile, String marketPair ) {
@@ -54,7 +53,7 @@ public class MarketLogger implements Runnable {
     
     try {
       writer = new BufferedWriter( new FileWriter( csvOutput ) );
-      writer.write( "Type,Price,Amount,BTC Value,Time\n" );
+      writer.write( "Time,Type,Price,Amount,BTC Value\n" );
     } catch( IOException e ) {
       e.printStackTrace();
     }
