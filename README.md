@@ -21,7 +21,7 @@ To query data from the official Mintpal API through a Java interface.
 In this repository is the Mintpal API query code and a few basic API based utilities.
 
 
-### MarketWatcher
+### MarketLogger
 
 Given an output path and market pairing, this will record trade history as long as it is running.
 
