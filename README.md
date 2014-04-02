@@ -141,6 +141,12 @@ double dailyLow
 
 double dailyVolume
 // Trade volume over the past 24 hours.
+
+double topBid
+// Highest bid (buy) price for the coin
+
+double topAsk
+// Lowest ask (sell) price for the coin
 ```
 
 

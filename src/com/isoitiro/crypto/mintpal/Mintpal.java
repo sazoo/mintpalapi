@@ -191,6 +191,8 @@ public class Mintpal {
       marketStatsData.dailyHigh = jsonObject.get( "24hhigh" ).getAsDouble();
       marketStatsData.dailyLow = jsonObject.get( "24hlow" ).getAsDouble();
       marketStatsData.dailyVolume = jsonObject.get( "24hvol" ).getAsDouble();
+      marketStatsData.topBid = jsonObject.get( "top_bid" ).getAsDouble();
+      marketStatsData.topAsk = jsonObject.get( "top_ask" ).getAsDouble();
       
       return marketStatsData;
     }
@@ -269,6 +271,8 @@ public class Mintpal {
     public double dailyHigh      = -1.0;
     public double dailyLow       = -1.0;
     public double dailyVolume    = -1.0;
+    public double topBid         = -1.0;
+    public double topAsk         = -1.0;
     
     @Override
     public String toString() {
